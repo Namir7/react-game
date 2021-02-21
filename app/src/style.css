@@ -1,0 +1,103 @@
+.app {
+  /* margin-top: 3rem; */
+  min-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+
+  background-color: rgba(59, 106, 204, 0.5);
+}
+
+.game {
+  margin-bottom: 5rem;
+
+  position: relative;
+}
+
+/* lifes indicator */
+.life-indicator {
+  width: 5rem;
+  height: 1.5rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  position: absolute;
+  top: 1rem;
+  right: 3rem;
+
+  border: 3px solid yellowgreen;
+}
+
+.life-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+
+  background-image: url("svg/heart.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* score indicator */
+.score-indicator {
+  width: fit-content;
+  min-width: 5rem;
+  height: 3rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  position: absolute;
+  top: 7rem;
+  left: 3rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  border: 3px solid greenyellow;
+
+  color: white;
+  font-size: 2rem;
+  font-family: Roboto, sans-serif;
+}
+
+/* game field */
+.game-field {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.path {
+  display: flex;
+  flex-direction: column-reverse;
+
+  background-color: rgb(238, 130, 238, 1);
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
+}
+
+.cell {
+  opacity: 0;
+
+  border-radius: 10%;
+}
+
+.cell-obstacle {
+  opacity: 1;
+
+  background-color: greenyellow;
+}
+
+.footer {
+  height: 3rem;
+
+  background-color: slategray;
+}
