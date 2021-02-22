@@ -14,7 +14,7 @@
 }
 
 /* lifes indicator */
-.life-indicator {
+.lifes-indicator {
   width: 5rem;
   height: 1.5rem;
 
@@ -73,11 +73,24 @@
 
   display: flex;
   flex-direction: row;
+
+  position: relative;
+}
+
+.runner {
+  position: absolute;
+  bottom: 0;
+
+  background-image: url("svg/cat.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .path {
   display: flex;
   flex-direction: column-reverse;
+
+  box-sizing: border-box;
 
   background-color: rgb(238, 130, 238, 1);
   border-left: 1px dashed white;
@@ -100,4 +113,12 @@
   height: 3rem;
 
   background-color: slategray;
+}
+
+/*  */
+
+.motion-buttons{
+  position: absolute;
+  bottom: 3rem;
+  left: 5rem;
 }
