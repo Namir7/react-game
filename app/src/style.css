@@ -3,14 +3,15 @@
   min-width: 50%;
   margin-left: auto;
   margin-right: auto;
-
-  background-color: rgba(59, 106, 204, 0.5);
 }
 
 .game {
-  margin-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 5rem;
 
   position: relative;
+
+  background-color: rgba(59, 106, 204, 0.5);
 }
 
 /* lifes indicator */
@@ -49,7 +50,7 @@
   padding-right: 0.5rem;
 
   position: absolute;
-  top: 7rem;
+  top: 8rem;
   left: 3rem;
 
   display: flex;
@@ -71,10 +72,26 @@
   margin-left: auto;
   margin-right: auto;
 
-  display: flex;
-  flex-direction: row;
+  position: relative;
+
+  /* overflow: hidden;  */
+}
+
+.road {
+  margin-left: auto;
+  margin-right: auto;
 
   position: relative;
+
+  background-color: rgb(238, 130, 238, 1);
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
+
+.obstacle {
+  position: absolute;
+
+  background-color: lightseagreen;
 }
 
 .runner {
@@ -86,39 +103,8 @@
   background-repeat: no-repeat;
 }
 
-.path {
-  display: flex;
-  flex-direction: column-reverse;
-
-  box-sizing: border-box;
-
-  background-color: rgb(238, 130, 238, 1);
-  border-left: 1px dashed white;
-  border-right: 1px dashed white;
-}
-
-.cell {
-  opacity: 0;
-
-  border-radius: 10%;
-}
-
-.cell-obstacle {
-  opacity: 1;
-
-  background-color: greenyellow;
-}
-
 .footer {
   height: 3rem;
 
   background-color: slategray;
-}
-
-/*  */
-
-.motion-buttons{
-  position: absolute;
-  bottom: 3rem;
-  left: 5rem;
 }
