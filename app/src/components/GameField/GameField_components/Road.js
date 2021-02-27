@@ -16,6 +16,15 @@ class Road extends React.Component {
       },
     };
 
+    this.style = {
+      width: `${
+        parseFloat(this.road.size.width) * this.props.MScale.scaleValue
+      }${this.props.MScale.scaleUnit}`,
+      height: `${
+        parseFloat(this.road.size.height) * this.props.MScale.scaleValue
+      }${this.props.MScale.scaleUnit}`,
+    };
+
     this.state = {
       obstacles: obstacles,
     };
@@ -25,12 +34,19 @@ class Road extends React.Component {
     );
   }
 
+  componentDidMount() {}
+
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.distancePassedValueInM != prevProps.distancePassedValueInM) {
+      this.props.setNearestObstacleToRunner(
+        this.state.obstacles,
+        this.props.runner.coordinatesInPx,
+        this.props.MScale
+      );
+    }
     if (
       Number.isInteger(this.props.distancePassedValueInM) &&
-      // TODO
-      // wrong condition value
-      this.props.distancePassedValueInM !== prevProps.distancePassedValueInM
+      this.props.distancePassedValueInM != prevProps.distancePassedValueInM
     ) {
       let obstacles = this.state.obstacles;
       obstacles.push(
@@ -41,6 +57,17 @@ class Road extends React.Component {
         )
       );
       this.setState(obstacles);
+    }
+    if (this.props.isRunnerAndNearestObstacleCollapsed) {
+      this.terminatePassedObstacleFromRoad(
+        this.props.nearestObstacleToRunner.id
+      );
+      this.props.stopIsObstacleAndRunnerCollapsed();
+      this.props.setNearestObstacleToRunner(
+        this.state.obstacles,
+        this.props.runner.coordinatesInPx,
+        this.props.MScale
+      );
     }
   }
 
@@ -54,36 +81,27 @@ class Road extends React.Component {
   }
 
   render() {
-    const style = {
-      width: `${
-        parseFloat(this.road.size.width) * this.props.MScale.scaleValue
-      }${this.props.MScale.scaleUnit}`,
-      height: `${
-        parseFloat(this.road.size.height) * this.props.MScale.scaleValue
-      }${this.props.MScale.scaleUnit}`,
-    };
+    let obstacles = this.state.obstacles.map((obstacle) => {
+      let positionBottom = `${
+        parseFloat(obstacle.positionFromStart) -
+        this.props.distancePassedValueInM
+      }M`;
+
+      obstacle.positionBottom = positionBottom;
+
+      return (
+        <Obstacle
+          key={String(obstacle.id)}
+          MScale={this.props.MScale}
+          obstacle={obstacle}
+          terminatePassedObstacleFromRoad={this.terminatePassedObstacleFromRoad}
+        />
+      );
+    });
 
     return (
-      <div className="road" style={style}>
-        {this.state.obstacles.map((obstacle) => {
-          let positionBottom = `${
-            parseFloat(obstacle.positionFromStart) -
-            this.props.distancePassedValueInM
-          }M`;
-
-          obstacle.positionBottom = positionBottom;
-
-          return (
-            <Obstacle
-              key={String(obstacle.id)}
-              MScale={this.props.MScale}
-              obstacle={obstacle}
-              terminatePassedObstacleFromRoad={
-                this.terminatePassedObstacleFromRoad
-              }
-            />
-          );
-        })}
+      <div className="road" style={this.style}>
+        {obstacles}
       </div>
     );
   }

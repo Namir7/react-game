@@ -16,7 +16,7 @@ export function createNewObstacle(
   };
   // TODO
   const [min, max] = [0, parseInt(roadSize.width)];
-  obstacle.positionLeft = `${Math.floor(Math.random() * (max - min)) + min}`;
+  obstacle.positionLeft = `${Math.floor(Math.random() * (max - min)) + min}M`;
   obstacle.positionFromStart = `${
     distancePassedValueInM + parseInt(roadSize.height)
   }M`;

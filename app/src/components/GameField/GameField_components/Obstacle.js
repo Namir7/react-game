@@ -35,6 +35,12 @@ export class Obstacle extends React.Component {
       }`,
     };
 
-    return <div className="obstacle" style={style}></div>;
+    return (
+      <div
+        className="obstacle"
+        style={style}
+        id={`obstacle-${this.obstacle.id}`}
+      ></div>
+    );
   }
 }

@@ -6,9 +6,28 @@ export class Runner extends React.Component {
 
     this.runner = {
       motionStep: `1M`,
+
       size: {
         width: `1M`,
         height: `1M`,
+      },
+
+      coordinatesInPx: {
+        // B1 - Top and left angle point
+        B1: {
+          xB1: null,
+          yX1: null,
+        },
+        // B2 - Bottom and right angle point
+        B2: {
+          xB2: null,
+          yB2: null,
+        },
+        B3: {
+          // B3 - center
+          xB3: null,
+          yB3: null,
+        },
       },
     };
 
@@ -18,6 +37,7 @@ export class Runner extends React.Component {
 
     this.handleClickArrowRight = this.handleClickArrowRight.bind(this);
     this.handleClickArrowLeft = this.handleClickArrowLeft.bind(this);
+    this.setRunnerCoordinates = this.setRunnerCoordinates.bind(this);
   }
 
   componentDidMount() {
@@ -25,23 +45,16 @@ export class Runner extends React.Component {
       if (e.code === "ArrowRight") this.handleClickArrowRight();
       if (e.code === "ArrowLeft") this.handleClickArrowLeft();
     });
+    this.setRunnerCoordinates();
+    this.props.changeRunnerCoordinates(this.runner.coordinatesInPx);
   }
 
-  componentDidUpdate() {
-    const runner = document.querySelector("#runner");
-    let B1 = {
-      xB1: runner.offsetLeft,
-      yB1: runner.offsetTop,
-    };
-    let B2 = {
-      xB2:
-        runner.offsetLeft +
-        parseFloat(this.runner.size.width) * this.props.MScale.scaleValue,
-      yB2:
-        runner.offsetTop +
-        parseFloat(this.runner.size.height) * this.props.MScale.scaleValue,
-    };
-    console.log(B1, B2);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.runnerPositionLeftInM != prevState.runnerPositionLeftInM) {
+      // if runnerPositionLeft changed
+      this.setRunnerCoordinates();
+      this.props.changeRunnerCoordinates(this.runner.coordinatesInPx);
+    }
   }
 
   handleClickArrowRight() {
@@ -58,6 +71,27 @@ export class Runner extends React.Component {
       runnerPositionLeftInM:
         this.state.runnerPositionLeftInM - parseFloat(this.runner.motionStep),
     });
+  }
+
+  setRunnerCoordinates() {
+    const runner = document.querySelector("#runner");
+    let B1 = {
+      xB1: runner.offsetLeft,
+      yB1: runner.offsetTop,
+    };
+    let B2 = {
+      xB2:
+        runner.offsetLeft +
+        parseFloat(this.runner.size.width) * this.props.MScale.scaleValue,
+      yB2:
+        runner.offsetTop +
+        parseFloat(this.runner.size.height) * this.props.MScale.scaleValue,
+    };
+    let B3 = {
+      xB3: B1.xB1 + (B2.xB2 - B1.xB1) / 2,
+      yB3: B1.yB1 + (B2.yB2 - B1.yB1) / 2,
+    };
+    this.runner.coordinatesInPx = { B1, B2, B3 };
   }
 
   render() {

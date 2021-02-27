@@ -5,8 +5,8 @@ export let obstacles = [
       width: `1M`,
       height: `1M`,
     },
-    positionLeft: `0M`,
-    positionFromStart: `5M`,
+    positionLeft: `3M`,
+    positionFromStart: `1M`,
   },
   {
     id: 1,
@@ -15,7 +15,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `4M`,
-    positionFromStart: `5M`,
+    positionFromStart: `4M`,
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `2M`,
-    positionFromStart: `6M`,
+    positionFromStart: `5M`,
   },
   {
     id: 3,
