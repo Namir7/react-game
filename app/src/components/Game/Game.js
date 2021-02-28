@@ -1,9 +1,9 @@
 import React from "react";
 
-import { GameField } from "./GameField/GameField.js";
-import { LifesIndicator } from "./LifesIndicator.js";
-import { ScoreIndicator } from "./ScoreIndicator.js";
-import { GamePanel } from "./GamePanel.js";
+import { GameField } from "./Game__Components/GameField/GameField.js";
+import { LifesIndicator } from "./Game__Components/LifesIndicator.js";
+import { ScoreIndicator } from "./Game__Components/ScoreIndicator.js";
+import { GamePanel } from "./Game__Components/GamePanel.js";
 
 export class Game extends React.Component {
   constructor() {
@@ -11,6 +11,8 @@ export class Game extends React.Component {
 
     this.timerId = null;
     this.state = {
+      gameState: null,
+      // waitToStart, stopped, inProcess,
       distancePassedValueInM: 0,
       lifesNumber: 3,
     };

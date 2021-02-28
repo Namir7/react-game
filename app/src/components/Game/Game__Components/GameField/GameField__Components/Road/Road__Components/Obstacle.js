@@ -1,5 +1,4 @@
 import React from "react";
-
 export class Obstacle extends React.Component {
   constructor(props) {
     super(props);
@@ -7,15 +6,7 @@ export class Obstacle extends React.Component {
     this.obstacle = this.props.obstacle;
   }
 
-  componentDidUpdate() {
-    if (
-      parseFloat(this.obstacle.positionBottom) +
-        parseFloat(this.obstacle.size.height) <=
-      0
-    ) {
-      this.props.terminatePassedObstacleFromRoad(this.obstacle.id);
-    }
-  }
+  componentDidUpdate() {}
 
   render() {
     const MScale = this.props.MScale;

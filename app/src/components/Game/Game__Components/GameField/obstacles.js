@@ -6,6 +6,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `3M`,
+    positionBottom: `1M`,
     positionFromStart: `1M`,
   },
   {
@@ -15,6 +16,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `4M`,
+    positionBottom: `4M`,
     positionFromStart: `4M`,
   },
   {
@@ -24,6 +26,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `2M`,
+    positionBottom: `5M`,
     positionFromStart: `5M`,
   },
   {
@@ -33,6 +36,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `3M`,
+    positionBottom: `7M`,
     positionFromStart: `7M`,
   },
   {
@@ -42,6 +46,7 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `0M`,
+    positionBottom: `8M`,
     positionFromStart: `8M`,
   },
   {
@@ -51,6 +56,17 @@ export let obstacles = [
       height: `1M`,
     },
     positionLeft: `2M`,
+    positionBottom: `9M`,
+    positionFromStart: `9M`,
+  },
+  {
+    id: 6,
+    size: {
+      width: `1M`,
+      height: `1M`,
+    },
+    positionLeft: `4M`,
+    positionBottom: `9M`,
     positionFromStart: `9M`,
   },
 ];

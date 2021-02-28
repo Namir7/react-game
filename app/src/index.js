@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import "./style.css";
 
 
-import { Game } from "./components/Game.js";
-import { Footer } from "./components/Footer.js";
+import { Game } from "./Components/Game/Game.js";
+import { Footer } from "./Components/Footer.js";
 
 function App() {
   return (
