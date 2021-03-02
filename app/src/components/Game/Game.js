@@ -1,9 +1,10 @@
 import React from "react";
 
-import { GameField } from "./Game__Components/GameField/GameField.js";
 import { LifesIndicator } from "./Game__Components/LifesIndicator.js";
 import { ScoreIndicator } from "./Game__Components/ScoreIndicator.js";
 import { GamePanel } from "./Game__Components/GamePanel.js";
+// import { GameField } from "./Game__Components/GameField/GameField.js";
+import { GameField } from "./Game__Components/GameField/GameField2.js";
 
 export class Game extends React.Component {
   constructor() {

@@ -1,6 +1,6 @@
 export function createNewObstacle(
   curentObstacles,
-  distancePassedValueInM,
+  // distancePassedValueInM,
   roadSize
 ) {
   let obstacle = {};
@@ -23,9 +23,9 @@ export function createNewObstacle(
   }M`;
   obstacle.positionBottom = `${parseInt(roadSize.height)}M`;
 
-  obstacle.positionFromStart = `${
-    distancePassedValueInM + parseInt(roadSize.height)
-  }M`;
+  // obstacle.positionFromStart = `${
+  //   distancePassedValueInM + parseInt(roadSize.height)
+  // }M`;
 
   return obstacle;
 }
