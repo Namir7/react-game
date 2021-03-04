@@ -3,7 +3,6 @@ import React from "react";
 import { LifesIndicator } from "./Game__Components/LifesIndicator.js";
 import { ScoreIndicator } from "./Game__Components/ScoreIndicator.js";
 import { GamePanel } from "./Game__Components/GamePanel.js";
-// import { GameField } from "./Game__Components/GameField/GameField.js";
 import { GameField } from "./Game__Components/GameField/GameField2.js";
 
 export class Game extends React.Component {
@@ -29,6 +28,9 @@ export class Game extends React.Component {
     if (this.state.lifesNumber <= 0) {
       this.stopGame();
     }
+    // DELETE
+    if (this.state.distancePassedValueInM != prevState.distancePassedValueInM) {
+    }
   }
 
   startGame() {
@@ -52,7 +54,6 @@ export class Game extends React.Component {
     this.setState({
       distancePassedValueInM: 0,
     });
-    console.clear();
   }
 
   moveGameField() {

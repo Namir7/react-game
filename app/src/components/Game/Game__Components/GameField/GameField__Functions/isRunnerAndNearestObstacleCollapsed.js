@@ -6,8 +6,6 @@ export function isRunnerAndNearestObstacleCollapsed(
   let A2 = nearestObstacleCoordinatesInPx.A2;
   let B1 = runnerCoordinatesInPx.B1;
   let B2 = runnerCoordinatesInPx.B2;
-  // console.clear();
-  // console.log({ A1, A2 }, { B1, B2 });
   // Top left angle
   if (
     B1.xB1 < A2.xA2 &&

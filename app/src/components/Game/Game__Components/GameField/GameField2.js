@@ -1,32 +1,21 @@
 import React from "react";
 
-// import { Runner } from "./GameField__Components/Runner2.js";
-// import { Road } from "./GameField__Components/Road/Road.js";
 import { Road } from "./GameField__Components/Road/Road2.js";
+import { Runner } from "./GameField__Components/Runner2/Runner2.js";
 
-import { initialObstacles } from "./initialObstacles.js";
+// data
+import { initialObstacles } from "./GameField2_Utils/initialObstacles.js";
 
 // functions
-import { createNewObstacle } from "./GameField__Functions/createNewObstacle.js";
-import { moveObstacle } from "./GameField2__Functions/moveObstacle.js";
-import { findObstacleIndexById } from "./GameField2__Functions/findObstacleIndexById.js";
-
-// TODO
-function determineIsRunnerAndNearestObstacleCollapsed(
-  runnerCoordinatesInPx,
-  nearestObstacleCoordinatesInPx
-) {
-  return false;
-}
-
-function createStyleObjectWithWidthAndHeight(width, height, MScale) {
-  let style = {
-    width: `${parseFloat(width) * MScale.scaleValue}${MScale.scaleUnit}`,
-    height: `${parseFloat(height) * MScale.scaleValue}${MScale.scaleUnit}`,
-  };
-
-  return style;
-}
+//
+//      Road: createNewObstacle, moveObstacle, findObstacleIndexById
+import { roadHelpfulMethods } from "./GameField2_Utils/GameField_functions.js";
+//      Runner: determineNewRunnerPosition
+import { runnerHelpfulMethods } from "./GameField2_Utils/GameField_functions.js";
+//      Coordinaets: determineCoordinatesInPx
+import { coordinatesHelpfulMethods } from "./GameField2_Utils/GameField_functions.js";
+//
+import { createStyle } from "./GameField2_Utils/GameField_functions.js";
 
 export class GameField extends React.Component {
   constructor(props) {
@@ -44,6 +33,16 @@ export class GameField extends React.Component {
       size: {
         width: `7M`,
         height: `15M`,
+        widthInM: 7,
+        heightInM: 15,
+      },
+    };
+    this.road = {};
+    this.runner = {
+      motionStepInM: 1,
+      size: {
+        widthInM: 1,
+        heightInM: 1,
       },
     };
 
@@ -55,70 +54,53 @@ export class GameField extends React.Component {
 
     this.state = {
       runner: {
-        // TODO
-        positionLeftInM: null,
+        position: {
+          leftInM: 3,
+          bottomInM: 0,
+        },
       },
 
       road: {
-        // obstacles: [],
         obstacles: initialObstacles,
       },
     };
 
     // road
-    this.moveAllObstaclesAndSetNewObstaclesState = this.moveAllObstaclesAndSetNewObstaclesState.bind(
+    this.moveAllObstaclesAndChangeState = this.moveAllObstaclesAndChangeState.bind(
       this
     );
-    this.moveObstacleAndSetNewObstaclesState = this.moveObstacleAndSetNewObstaclesState.bind(
+    this.moveObstacleAndChangeState = this.moveObstacleAndChangeState.bind(
       this
     );
-    this.createNewObstacleAndSetNewObstaclesState = this.createNewObstacleAndSetNewObstaclesState.bind(
+    this.createNewObstacleAndChangeState = this.createNewObstacleAndChangeState.bind(
       this
     );
-    this.deleteObstacleAndSetNewObstaclesState = this.deleteObstacleAndSetNewObstaclesState.bind(
+    this.deleteObstacleAndChangeState = this.deleteObstacleAndChangeState.bind(
       this
     );
     // runner
+    this.moveRunnerRightAndChangeState = this.moveRunnerRightAndChangeState.bind(
+      this
+    );
+    this.moveRunnerLeftAndChangeState = this.moveRunnerLeftAndChangeState.bind(
+      this
+    );
   }
 
   componentDidMount() {
-    console.log(`GameField mounted`);
-    // set obstacles
-    // this.setState({
-    //   road: {
-    //     obstacles: initialObstacles,
-    //   },
-    // });
+    // set coordinates
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // if (this.props != prevProps) {
-    //   console.log(`GameField props updated`);
-    // }
-    // if (this.state != prevState) {
-    //   console.log(`GameField state updated`);
-    // }
     let isRunnerPositionOrPassedDistanceChanged =
-      this.state.runner.positionLeftInM != prevState.runner.positionLeftInM ||
-      // TODO
+      this.state.runner.position != prevState.runner.position ||
       this.props.distancePassedValueInM != prevProps.distancePassedValueInM;
     if (isRunnerPositionOrPassedDistanceChanged) {
-      let isRunnerAndNearestObstacleCollapsed = determineIsRunnerAndNearestObstacleCollapsed(
-        this._runnerCoordinatesIxPx,
-        this._nearestObstacle.coordinatesInPx
-      );
-      if (isRunnerAndNearestObstacleCollapsed) {
-        this.props.deleteLife();
-      }
     }
   }
 
   //road
-  moveAllObstaclesAndSetNewObstaclesState(
-    obstacles,
-    motionStepInM,
-    moveObstacle
-  ) {
+  moveAllObstaclesAndChangeState(obstacles, motionStepInM, moveObstacle) {
     let newObstacles = obstacles.slice(0);
     newObstacles = newObstacles.map((obstacle) => {
       return moveObstacle(obstacle, motionStepInM);
@@ -130,7 +112,7 @@ export class GameField extends React.Component {
     });
   }
 
-  moveObstacleAndSetNewObstaclesState(
+  moveObstacleAndChangeState(
     id,
     obstacles,
     motionStepInM,
@@ -150,13 +132,13 @@ export class GameField extends React.Component {
     });
   }
 
-  createNewObstacleAndSetNewObstaclesState(
-    obstacles,
-    gameFieldSizeInM,
-    createNewObstacle
-  ) {
+  createNewObstacleAndChangeState(obstacles, gameFieldSize, createNewObstacle) {
     let newObstacles = obstacles.slice(0);
-    let newObstacle = createNewObstacle(obstacles, gameFieldSizeInM);
+    // let newObstacle = createNewObstacle(obstacles, gameFieldSize);
+    let newObstacle = createNewObstacle(
+      { widthInM: 1, heightInM: 1 },
+      { obstacles, gameFieldSize }
+    );
     newObstacles.push(newObstacle);
     this.setState({
       road: {
@@ -165,7 +147,7 @@ export class GameField extends React.Component {
     });
   }
 
-  deleteObstacleAndSetNewObstaclesState(id, obstacles, findObstacleIndexById) {
+  deleteObstacleAndChangeState(id, obstacles, findObstacleIndexById) {
     let newObstacles = obstacles.slice(0);
     let indexOfDeletingObstacle = findObstacleIndexById(id, obstacles);
     newObstacles.splice(indexOfDeletingObstacle, 1);
@@ -176,32 +158,114 @@ export class GameField extends React.Component {
     });
   }
 
-  render() {
-    const style = createStyleObjectWithWidthAndHeight(
-      this.gameField.size.width,
-      this.gameField.size.height,
-      this.MScale
+  // runner
+  moveRunnerRightAndChangeState(
+    direction,
+    runnerNeededInfo,
+    gameFieldSize,
+    determineNewRunnerPosition
+  ) {
+    let newRunnerPosition = determineNewRunnerPosition(
+      direction,
+      runnerNeededInfo,
+      gameFieldSize
     );
+    this.setState({
+      runner: {
+        position: newRunnerPosition,
+      },
+    });
+  }
+
+  moveRunnerLeftAndChangeState(
+    direction,
+    runnerNeededInfo,
+    gameFieldSize,
+    determineNewRunnerPosition
+  ) {
+    let newRunnerPosition = determineNewRunnerPosition(
+      direction,
+      runnerNeededInfo,
+      gameFieldSize
+    );
+    this.setState({
+      runner: {
+        position: newRunnerPosition,
+      },
+    });
+  }
+
+  // coordinates
+  setNearestObstacle() {}
+
+  setCoordinatesToRunner() {}
+
+  render() {
+    const style = createStyle(this.gameField.size, null, this.MScale);
+
+    // TODO (one object)
+    let propsForRoad = {
+      road: Object.assign({}, this.road, this.state.road),
+
+      distancePassedValueInM: this.props.distancePassedValueInM,
+
+      gameFieldMethods: {
+        moveAllObstaclesAndChangeState: this.moveAllObstaclesAndChangeState,
+        createNewObstacleAndChangeState: this.createNewObstacleAndChangeState,
+        deleteObstacleAndChangeState: this.deleteObstacleAndChangeState,
+      },
+
+      utils: {
+        gameFieldSize: this.gameField.size,
+        MScale: this.MScale,
+        functions: {
+          moveObstacle: roadHelpfulMethods.moveObstacle,
+          createNewObstacle: roadHelpfulMethods.createNewObstacle,
+          findObstacleIndexById: roadHelpfulMethods.findObstacleIndexById,
+        },
+      },
+    };
+
+    let propsForRunner = {
+      // TODO (need to add static and dymanic difference?)
+      runner: Object.assign(
+        {},
+        // static
+        this.runner,
+        // dynamic
+        this.state.runner
+      ),
+
+      gameFieldMethods: {
+        moveRunnerRightAndChangeState: this.moveRunnerRightAndChangeState,
+        moveRunnerLeftAndChangeState: this.moveRunnerLeftAndChangeState,
+      },
+
+      utils: {
+        runner: this.runner,
+        gameField: this.gameField,
+        MScale: this.MScale,
+        functions: {
+          determineNewRunnerPosition:
+            runnerHelpfulMethods.determineNewRunnerPosition,
+        },
+      },
+    };
 
     return (
       <div className="game-field" style={style}>
         <Road
-          obstacles={this.state.road.obstacles}
-          gameFieldSize={this.gameField.size}
-          distancePassedValueInM={this.props.distancePassedValueInM}
-          //   methods
-          moveAllObstaclesAndSetNewObstaclesState={
-            this.moveAllObstaclesAndSetNewObstaclesState
-          }
-          createNewObstacleAndSetNewObstaclesState={
-            this.createNewObstacleAndSetNewObstaclesState
-          }
-          deleteObstacleAndSetNewObstaclesState={
-            this.deleteObstacleAndSetNewObstaclesState
-          }
-          MScale={this.MScale}
+          road={propsForRoad.road}
+          gameFieldMethods={propsForRoad.gameFieldMethods}
+          utils={propsForRoad.utils}
+          distancePassedValueInM={propsForRoad.distancePassedValueInM}
         />
-        {/* <Runner /> */}
+
+        <Runner
+          runner={propsForRunner.runner}
+          gameFieldMethods={propsForRunner.gameFieldMethods}
+          utils={propsForRunner.utils}
+        />
       </div>
     );
   }
