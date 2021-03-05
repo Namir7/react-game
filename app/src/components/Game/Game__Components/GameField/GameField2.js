@@ -17,6 +17,13 @@ import { coordinatesHelpfulMethods } from "./GameField2_Utils/GameField_function
 //
 import { createStyle } from "./GameField2_Utils/GameField_functions.js";
 
+let determineNearestObstacleToRunner =
+  coordinatesHelpfulMethods.determineNearestObstacleToRunner;
+let determineCoordinates = coordinatesHelpfulMethods.determineCoordinates;
+let determineDistance = coordinatesHelpfulMethods.determineDistance;
+let isNearestObstacleAndRunnerCollapsed =
+  coordinatesHelpfulMethods.isNearestObstacleAndRunnerCollapsed;
+
 export class GameField extends React.Component {
   constructor(props) {
     super(props);
@@ -31,12 +38,11 @@ export class GameField extends React.Component {
 
     this.gameField = {
       size: {
-        width: `7M`,
-        height: `15M`,
         widthInM: 7,
         heightInM: 15,
       },
     };
+
     this.road = {};
     this.runner = {
       motionStepInM: 1,
@@ -46,10 +52,11 @@ export class GameField extends React.Component {
       },
     };
 
-    this._runnerCoordinatesIxPx = {};
-    this._nearestObstacle = {
+    this._runnerCoordinates = {};
+    // TODO (this._nearestBlockToRunner)
+    this._nearestObstacleToRunner = {
       id: null,
-      coordinatesInPx: {},
+      coordinates: {},
     };
 
     this.state = {
@@ -85,17 +92,53 @@ export class GameField extends React.Component {
     this.moveRunnerLeftAndChangeState = this.moveRunnerLeftAndChangeState.bind(
       this
     );
+    this.moveRunnerUpAndChangeState = this.moveRunnerUpAndChangeState.bind(
+      this
+    );
+    this.moveRunnerDownAndChangeState = this.moveRunnerDownAndChangeState.bind(
+      this
+    );
+    // coordinates
+    this.setCoordinatesToRunner = this.setCoordinatesToRunner.bind(this);
+    this.setNearestObstacleToRunner = this.setNearestObstacleToRunner.bind(
+      this
+    );
   }
 
   componentDidMount() {
     // set coordinates
+    this.setCoordinatesToRunner();
+    this.setNearestObstacleToRunner();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let isRunnerPositionOrPassedDistanceChanged =
-      this.state.runner.position != prevState.runner.position ||
+    // TODO (fix bag)
+    let isRunnerPositionChanged =
+      this.state.runner.position != prevState.runner.position;
+    let isPassedDistanceChanged =
       this.props.distancePassedValueInM != prevProps.distancePassedValueInM;
-    if (isRunnerPositionOrPassedDistanceChanged) {
+    // TODO
+    let isOneObstacleDeleted =
+      this.state.road.obstacles.length < prevState.road.obstacles.length;
+    // TODO (more clear)
+
+    if (isRunnerPositionChanged || isPassedDistanceChanged) {
+      // TODO fix bag(if obstacles === [])
+      this.setCoordinatesToRunner();
+      this.setNearestObstacleToRunner();
+      let isCollapsed = isNearestObstacleAndRunnerCollapsed(
+        this._nearestObstacleToRunner.coordinates,
+        this._runnerCoordinates
+      );
+
+      if (isCollapsed) {
+        this.props.deleteLife();
+        this.deleteObstacleAndChangeState(
+          this._nearestObstacleToRunner.id,
+          this.state.road.obstacles,
+          roadHelpfulMethods.findObstacleIndexById
+        );
+      }
     }
   }
 
@@ -195,10 +238,66 @@ export class GameField extends React.Component {
     });
   }
 
-  // coordinates
-  setNearestObstacle() {}
+  moveRunnerUpAndChangeState(
+    direction,
+    runnerNeededInfo,
+    gameFieldSize,
+    determineNewRunnerPosition
+  ) {
+    let newRunnerPosition = determineNewRunnerPosition(
+      direction,
+      runnerNeededInfo,
+      gameFieldSize
+    );
+    this.setState({
+      runner: {
+        position: newRunnerPosition,
+      },
+    });
+  }
 
-  setCoordinatesToRunner() {}
+  moveRunnerDownAndChangeState(
+    direction,
+    runnerNeededInfo,
+    gameFieldSize,
+    determineNewRunnerPosition
+  ) {
+    let newRunnerPosition = determineNewRunnerPosition(
+      direction,
+      runnerNeededInfo,
+      gameFieldSize
+    );
+    this.setState({
+      runner: {
+        position: newRunnerPosition,
+      },
+    });
+  }
+
+  // coordinates
+  setCoordinatesToRunner() {
+    let runnerNeededData = Object.assign({}, this.runner, this.state.runner);
+    let MScale = this.MScale;
+    let newCoordinates = determineCoordinates(runnerNeededData, MScale);
+    this._runnerCoordinates = newCoordinates;
+  }
+
+  setNearestObstacleToRunner() {
+    let obstacles = this.state.road.obstacles;
+    let runner = Object.assign({}, this.runner, this.state.runner);
+    let utils = {
+      functions: { determineCoordinates, determineDistance },
+      MScale: this.MScale,
+    };
+
+    let newNearestObstacleToRunner = determineNearestObstacleToRunner(
+      obstacles,
+      runner,
+      utils
+    );
+
+    this._nearestObstacleToRunner = newNearestObstacleToRunner;
+  }
 
   render() {
     const style = createStyle(this.gameField.size, null, this.MScale);

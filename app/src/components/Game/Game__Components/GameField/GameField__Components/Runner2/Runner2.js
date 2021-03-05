@@ -8,12 +8,16 @@ export class Runner extends React.Component {
 
     this.handleClickArrowRight = this.handleClickArrowRight.bind(this);
     this.handleClickArrowLeft = this.handleClickArrowLeft.bind(this);
+    this.handleClickArrowUp = this.handleClickArrowUp.bind(this);
+    this.handleClickArrowDown = this.handleClickArrowDown.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener("keydown", (e) => {
       if (e.code === "ArrowRight") this.handleClickArrowRight();
       if (e.code === "ArrowLeft") this.handleClickArrowLeft();
+      if (e.code === "ArrowUp") this.handleClickArrowUp();
+      if (e.code === "ArrowDown") this.handleClickArrowDown();
     });
   }
 
@@ -33,6 +37,32 @@ export class Runner extends React.Component {
   handleClickArrowLeft() {
     this.props.gameFieldMethods.moveRunnerRightAndChangeState(
       "left",
+      {
+        position: this.props.runner.position,
+        size: this.props.runner.size,
+        motionStepInM: this.props.runner.motionStepInM,
+      },
+      this.props.utils.gameField.size,
+      this.props.utils.functions.determineNewRunnerPosition
+    );
+  }
+
+  handleClickArrowUp() {
+    this.props.gameFieldMethods.moveRunnerRightAndChangeState(
+      "up",
+      {
+        position: this.props.runner.position,
+        size: this.props.runner.size,
+        motionStepInM: this.props.runner.motionStepInM,
+      },
+      this.props.utils.gameField.size,
+      this.props.utils.functions.determineNewRunnerPosition
+    );
+  }
+
+  handleClickArrowDown() {
+    this.props.gameFieldMethods.moveRunnerRightAndChangeState(
+      "down",
       {
         position: this.props.runner.position,
         size: this.props.runner.size,

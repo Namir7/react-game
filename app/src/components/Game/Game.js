@@ -10,6 +10,8 @@ export class Game extends React.Component {
     super();
 
     this.timerId = null;
+    this.acceleration = 0.01;
+    this.motionStep = 0.01;
     this.state = {
       gameState: null,
       // waitToStart, stopped, inProcess,
@@ -36,11 +38,12 @@ export class Game extends React.Component {
   startGame() {
     this.timerId = setInterval(() => {
       let newDistancePassedValueInM = parseFloat(
-        (this.state.distancePassedValueInM + parseFloat(`0.01M`)).toFixed(2)
+        (this.state.distancePassedValueInM + this.motionStep).toFixed(2)
       );
       this.setState({
         distancePassedValueInM: newDistancePassedValueInM,
       });
+      this.motionStep = this.motionStep + this.acceleration;
     }, 1);
   }
 
@@ -58,7 +61,7 @@ export class Game extends React.Component {
 
   moveGameField() {
     let newDistancePassedValueInM = parseFloat(
-      (this.state.distancePassedValueInM + parseFloat(`0.5M`)).toFixed(2)
+      (this.state.distancePassedValueInM + this.motionStep * 20).toFixed(2)
     );
     this.setState({
       distancePassedValueInM: newDistancePassedValueInM,
